@@ -1,7 +1,7 @@
 ## My first project in Back End development (DATA ANALYST & DATA ENGINEER)
 
-<h1>This project is to show my coding skills and my knowledge in python and SQL Programming. 
-I'll be adding some features into this REPO when i had the knowledge to do </h1>
+This project is to show my coding skills and my knowledge in python and SQL Programming. 
+I'll be adding some features into this REPO when i had the knowledge to do
 
 
 <h2> CSV FILES </h2> 
