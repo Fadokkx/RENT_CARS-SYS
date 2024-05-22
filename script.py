@@ -41,8 +41,9 @@ try:
     plt.pie(year_counts, labels=years, autopct='%1.1f%%', startangle=140)
     plt.title('Cars per Year')
     plt.axis('equal')
-    plt.savefig('cars_per_year.png')  # Save the figure
     plt.show()  # Show the figure
+    # Save the figure
+    # plt.savefig('cars_per_year.png')  
 
     # CREATE BAR CHART FOR CARS BY MAKE
     plt.figure(figsize=(12, 6))
@@ -51,8 +52,9 @@ try:
     plt.xlabel('Make')
     plt.ylabel('Number of Cars')
     plt.xticks(rotation=45, ha='right')
-    plt.savefig('cars_by_make.png')  # Save the figure
     plt.show()  # Show the figure
+    # Save the figure
+    # plt.savefig('cars_by_make.png') 
 
 except psycopg2.Error as e:
     print("Failed to connect PostgreSQL", e)

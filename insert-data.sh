@@ -1,9 +1,11 @@
-#! /bin/bas
-# if [[ $1 == "test" ]]
-# then
-#PSQL="psql --username=postgres --dbname=cars -t --no-align -c"
-#else
-#PSQL="psql --username=postgres --dbname=cars -t --no-align -c"
-#fi
-#$PSQL "TRUNCATE customers, cars"
-#cat cars_data_text.csv | while IFS="," read -r YEAR_MODEL MAKE MODEL SIZE PLATE
+#! bin/bash 
+# IN PROCESS TO AUTOMATIZE THE INSERT DATA
+
+if [[ $1 == "test" ]]
+then 
+  PSQL="psql --username=postgres dbname=carstest -t --no-align -c"
+else 
+  PSQL="psql --username=postgres dbname=cars -t --no-align -c"
+fi 
+
+echo $($PSQL "TRUNCATE TABLE cars, costumers")
