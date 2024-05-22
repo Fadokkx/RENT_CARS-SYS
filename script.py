@@ -30,14 +30,14 @@ try:
     year = [row[0] for row in rows]
     count = [row[1] for row in rows]
 
-    # Criar o gráfico de pizza
+    # CREATE GRAPH FIGURE 
     plt.figure(figsize=(8, 6))
     plt.pie(count, labels=year, autopct='%1.1f%%', startangle=140)    
     plt.title('Cars per year')
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
-    # Mostrar o gráfico
+    # SHOW THE GRAPH
     plt.show()
 
 except psycopg2.Error as e:
-    print("Erro ao conectar ao PostgreSQL:", e)
+    print("Failed to connect POSTGRESQL :", e)
