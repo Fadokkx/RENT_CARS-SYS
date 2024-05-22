@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# if f [[ $1 == "test" ]]
+# if [[ $1 == "test" ]]
 # then
   #PSQL="psql --username=postgres --dbname=cars -t --no-align -c"
 #else
