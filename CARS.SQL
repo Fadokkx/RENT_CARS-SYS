@@ -1,0 +1,19 @@
+INSERT INTO cars VALUES 
+(default,2011,'MITSUBISHI','i-MiEV','SUBCOMPACT','ABC123'),
+(default,2012,'NISSAN','LEAF','MID-SIZE','DEF456'),
+(default,2013,'FORD','FOCUS ELECTRIC','COMPACT','GHI789'),
+(default,2014,'MITSUBISHI','i-MiEV','SUBCOMPACT','JKL012'),
+(default,2015,'NISSAN','LEAF','MID-SIZE','MNO345');
+
+ALTER TABLE cars ALTER COLUMN plate value UNIQUE;
+
+CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(15) NOT NULL UNIQUE,
+    adress VARCHAR(20),
+    region VARCHAR(30),
+    country VARCHAR (20) ); 
+
+);
+
