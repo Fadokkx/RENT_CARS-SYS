@@ -1,11 +1,11 @@
 --
 -- PostgreSQL database dump
--- pg_dump -h localhost -U postgres -d cars -F p -b -v -f dump-cars.sql TERMINAL COMMAND
+--
 
 -- Dumped from database version 16.3
 -- Dumped by pg_dump version 16.3
 
--- Started on 2024-05-22 15:45:47
+-- Started on 2024-05-25 00:04:19
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -33,7 +33,8 @@ CREATE TABLE public.cars (
     make character varying(50) NOT NULL,
     model character varying(40) NOT NULL,
     category character varying(20) NOT NULL,
-    plate character varying(15) NOT NULL
+    plate character varying(15) NOT NULL,
+    available boolean NOT NULL
 );
 
 
@@ -128,7 +129,12 @@ ALTER TABLE ONLY public.customers ALTER COLUMN customer_id SET DEFAULT nextval('
 -- Data for Name: cars; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cars (car_id, year_model, make, model, category, plate) FROM stdin;
+COPY public.cars (car_id, year_model, make, model, category, plate, available) FROM stdin;
+1	2012	MITSUBISHI	i-MiEV	SUBCOMPACT	ABC123	t
+2	2012	NISSAN	LEAF	MID-SIZE	DEF456	t
+3	2013	FORD	FOCUS ELECTRIC	COMPACT	GHI789	t
+4	2013	MITSUBISHI	i-MiEV	SUBCOMPACT	JKL012	t
+5	2013	NISSAN	LEAF	MID-SIZE	MNO345	t
 \.
 
 
@@ -148,7 +154,7 @@ COPY public.customers (customer_id, name, phone, adress, region, country) FROM s
 -- Name: cars_car_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cars_car_id_seq', 26, true);
+SELECT pg_catalog.setval('public.cars_car_id_seq', 31, true);
 
 
 --
@@ -196,7 +202,7 @@ ALTER TABLE ONLY public.cars
     ADD CONSTRAINT unique_plate UNIQUE (plate);
 
 
--- Completed on 2024-05-22 15:45:49
+-- Completed on 2024-05-25 00:04:20
 
 --
 -- PostgreSQL database dump complete
