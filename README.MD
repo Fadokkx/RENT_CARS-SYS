@@ -1,6 +1,6 @@
 ## My first project in Back End development (DATA ANALYST & DATA ENGINEER)
 
-This project is to show my coding skills and my knowledge in python and SQL Programming. 
+This project is to show my coding skills and my knowledge in python, shell and SQL Programming. 
 I'll be adding some features into this REPO when i had the knowledge to do
 
 
