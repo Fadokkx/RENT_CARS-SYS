@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3
 -- Dumped by pg_dump version 16.3
 
--- Started on 2024-06-07 17:01:11
+-- Started on 2024-06-07 20:37:51
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -178,11 +178,6 @@ ALTER TABLE ONLY public.rentals ALTER COLUMN rental_id SET DEFAULT nextval('publ
 --
 
 COPY public.cars (car_id, year_model, make, model, category, plate, available) FROM stdin;
-1	2012	MITSUBISHI	i-MiEV	SUBCOMPACT	ABC123	t
-2	2012	NISSAN	LEAF	MID-SIZE	DEF456	t
-3	2013	FORD	FOCUS ELECTRIC	COMPACT	GHI789	t
-4	2013	MITSUBISHI	i-MiEV	SUBCOMPACT	JKL012	t
-5	2013	NISSAN	LEAF	MID-SIZE	MNO345	t
 \.
 
 
@@ -193,11 +188,6 @@ COPY public.cars (car_id, year_model, make, model, category, plate, available) F
 --
 
 COPY public.customers (customer_id, name, phone, country, email) FROM stdin;
-1	Hayley Zamora	1-350-925-4842	Singapore	proin@aol.ca
-2	Brenda Noble	1-276-589-9929	United States	nullam.lobortis.quam@outlook.com
-3	Martena Jenkins	(772) 197-3584	South Korea	tellus.id@hotmail.com
-4	Berk Buck	1-612-536-7610	Canada	cras.pellentesque@aol.net
-5	Ralph Crawford	1-821-999-9438	Germany	fusce@protonmail.org
 \.
 
 
@@ -217,7 +207,7 @@ COPY public.rentals (rental_id, customer_id, car_id, date_rented, date_returned)
 -- Name: cars_car_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cars_car_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cars_car_id_seq', 1, true);
 
 
 --
@@ -226,7 +216,7 @@ SELECT pg_catalog.setval('public.cars_car_id_seq', 1, false);
 -- Name: customers_customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.customers_customer_id_seq', 5, true);
+SELECT pg_catalog.setval('public.customers_customer_id_seq', 12, true);
 
 
 --
@@ -301,7 +291,7 @@ ALTER TABLE ONLY public.rentals
     ADD CONSTRAINT fk_customer_id FOREIGN KEY (customer_id) REFERENCES public.customers(customer_id);
 
 
--- Completed on 2024-06-07 17:01:13
+-- Completed on 2024-06-07 20:37:53
 
 --
 -- PostgreSQL database dump complete
