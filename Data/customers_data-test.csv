@@ -1,7 +1,6 @@
-customer_id,name,email,address,region,country
-1,Maisie Calderon,donec.est@aol.couk,"103-388 Pellentesque, St.",Aisén,Chile
-2,Amos Branch,lectus@yahoo.ca,Ap #508-6919 Ante. Rd.,Chandigarh,India
-3,Magee Reeves,eleifend@outlook.org,229-613 Rhoncus. Av.,Huáběi,China
-4,Igor Alvarado,mauris.ipsum.porta@aol.com,Ap #732-7076 Ornare Street,Mizoram,India
-5,Geraldine Cobb,lacinia.vitae.sodales@icloud.edu,7409 Ultricies Rd.,La Libertad,Peru
-6,Nelle Randolph,sed.eu@hotmail.edu,"371-8448 Dolor, Road",Gilgit Baltistan,Pakistan
+name,phone,country,email
+Hayley Zamora,1-350-925-4842,Singapore,proin@aol.ca
+Brenda Noble,1-276-589-9929,United States,nullam.lobortis.quam@outlook.com
+Martena Jenkins,(772) 197-3584,South Korea,tellus.id@hotmail.com
+Berk Buck,1-612-536-7610,Canada,cras.pellentesque@aol.net
+Ralph Crawford,1-821-999-9438,Germany,fusce@protonmail.org
