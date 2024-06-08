@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3
 -- Dumped by pg_dump version 16.3
 
--- Started on 2024-06-07 20:37:51
+-- Started on 2024-06-08 01:06:02
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -178,6 +178,11 @@ ALTER TABLE ONLY public.rentals ALTER COLUMN rental_id SET DEFAULT nextval('publ
 --
 
 COPY public.cars (car_id, year_model, make, model, category, plate, available) FROM stdin;
+1	2012	MITSUBISHI	i-MiEV	SUBCOMPACT	ABC123	t
+2	2012	NISSAN	LEAF	MID-SIZE	DEF456	t
+3	2013	FORD	FOCUS ELECTRIC	COMPACT	GHI789	t
+4	2013	MITSUBISHI	i-MiEV	SUBCOMPACT	JKL012	t
+5	2013	NISSAN	LEAF	MID-SIZE	MNO345	t
 \.
 
 
@@ -207,7 +212,7 @@ COPY public.rentals (rental_id, customer_id, car_id, date_rented, date_returned)
 -- Name: cars_car_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cars_car_id_seq', 1, true);
+SELECT pg_catalog.setval('public.cars_car_id_seq', 3, true);
 
 
 --
@@ -216,7 +221,7 @@ SELECT pg_catalog.setval('public.cars_car_id_seq', 1, true);
 -- Name: customers_customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.customers_customer_id_seq', 12, true);
+SELECT pg_catalog.setval('public.customers_customer_id_seq', 22, true);
 
 
 --
@@ -225,7 +230,7 @@ SELECT pg_catalog.setval('public.customers_customer_id_seq', 12, true);
 -- Name: rentals_rental_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.rentals_rental_id_seq', 1, false);
+SELECT pg_catalog.setval('public.rentals_rental_id_seq', 12, true);
 
 
 --
@@ -291,7 +296,7 @@ ALTER TABLE ONLY public.rentals
     ADD CONSTRAINT fk_customer_id FOREIGN KEY (customer_id) REFERENCES public.customers(customer_id);
 
 
--- Completed on 2024-06-07 20:37:53
+-- Completed on 2024-06-08 01:06:03
 
 --
 -- PostgreSQL database dump complete

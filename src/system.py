@@ -14,6 +14,7 @@ try:
 except Exception as e:
     print(f"Unable to connect to the database: {e}")
     exit()
+
 #---------------------------------------MAIN MENU ------------------------------------------------------------------------#
 def main_menu():
     print("\n~~~~~ TopDrive Rent-a-Car Services LTDA. ~~~~~\n")
@@ -43,7 +44,7 @@ def rent_menu():
         exit_program()
     else:
         print("\nToday, we have these cars:\nCAR_ID| YEAR| MAKE| MODEL| SIZE")
-    # Return all cars in database
+        # Return all cars in database
         for row in car_data:
             print(f"{row[0]}| {row[1]}| {row[2]}| {row[3]}| {row[4]}")
     
@@ -56,59 +57,91 @@ def rent_menu():
         print("\nPlease, insert a valid option\n")
         rent_menu()
     else:
-        #get car Available
+        # Get car availability
         cursor.execute("SELECT available FROM cars WHERE car_id = %s AND available = true", (CAR_ID_TO_RENT,))
         car_available = cursor.fetchall()
-        # IF car is'nt available
+        # If car isn't available
         if len(car_available) == 0:
             print ("This car is not available at the moment.")
             exit_program()
         else:
-            #Send to "SIGN UP" screen
+            # Send to "SIGN UP" screen
             print ("\nOne more thing to complete the rent service\n")
-            phone = input("\nInput your phone number: ") 
-            #check if phone is in database 
+            phone = input("\nInput your phone number \n(in the international format = 12025551234 without spaces or any symbol) \n: ") 
+            
+            # Check if phone is in database 
             cursor.execute("SELECT * FROM customers WHERE phone = %s", (phone,))
-            phone_check = cursor.fetchall()
-            #if phone isn't in database
-            if len(phone_check) == 0:
+            PHONE_CHECK = cursor.fetchall()
+
+            # If phone isn't in database
+            if len(PHONE_CHECK) == 0:
                 print("\nYour phone isn't in our system")
                 name = input("\nEnter your name to register: ") # Required to register
                 email = input("\nNow, your email: ") # Required to register
                 country = input("\nAnd finally, your country of birth: ") # Required to register
+                
                 # Insert the variables into database
                 cursor.execute("INSERT INTO customers (name, phone, country, email) VALUES (%s, %s, %s, %s)", (name, phone, country, email))
                 conn.commit()
-                print("You have been successfully registered.")
-                # Set car as rented in database
-                cursor.execute("UPDATE cars SET available = false WHERE car_id = %s", (CAR_ID_TO_RENT,))
-                conn.commit()
-                print("Your car will be delivered to you, please wait a moment.")
-            #Car now is rented
-            
-            #if phone is in database
-            else:
-                #Check if the data is right
-                for row in phone_check:
-                    print(f"Are you {row[1]} from {row[3]} and email = {row[4]} ")
-                    while True:    
-                        check_identify=input("\nRight (y/n) ?\n")
-                    if check_identify=="y":
-                        print (f"Ok, {row[1]}. Your car will be delivery for you, wait a moment.")
-                        break
+                print("\nYou have been successfully registered.")
 
-                    elif check_identify=="n":
-                        print ("Lets do it all again...")
+                # Catch the car's info
+                cursor.execute("SELECT year_model, make, model, plate FROM cars WHERE car_id = %s", (CAR_ID_TO_RENT,))
+                car_info = cursor.fetchone()
+                
+                if car_info and len(car_info) == 4:
+                    # Set car as rented in database
+                    cursor.execute("UPDATE cars SET available = false WHERE car_id = %s", (CAR_ID_TO_RENT,))
+                    conn.commit()
+                    print(f"Ok, {name}.")
+                    print(f"Your {car_info[0]} {car_info[1]} {car_info[2]} with the plate {car_info[3]} will be delivered to you, please wait a moment.") 
+                    
+                    # Get the new customer_id and link in rental table
+                    cursor.execute("SELECT customer_id FROM customers WHERE phone = %s", (phone,))
+                    new_customer_id = cursor.fetchone()[0]
+                    cursor.execute("INSERT INTO rentals (customer_id, car_id, date_rented) VALUES (%s, %s, current_timestamp)", (new_customer_id, CAR_ID_TO_RENT))
+                    conn.commit()
+                else:
+                    print("Error fetching car information. Please try again.")
+            # If phone is in database
+            else:
+                # Check if the data is right
+                for row in PHONE_CHECK:
+                    print(f"Are you {row[1]} from {row[3]} and email = {row[4]} ")
+                    check_identify = input("\nRight (y/n) ?\n")
+                    if check_identify == "y":
+                        print(f"Ok, {row[1]}.")
+                        
+                        # Catch the car's info
+                        cursor.execute("SELECT year_model, make, model, plate FROM cars WHERE car_id = %s", (CAR_ID_TO_RENT,))
+                        car_info = cursor.fetchone()
+
+                        if car_info and len(car_info) == 4:
+                            print(f"Your {car_info[0]} {car_info[1]} {car_info[2]} with the plate {car_info[3]} will be delivered to you, please wait a moment.\n") 
+
+                        # Set car as rented in database
+                        cursor.execute("UPDATE cars SET available = false WHERE car_id = %s", (CAR_ID_TO_RENT,))
+                        conn.commit()
+
+                        # Get customer_id and link at rental table
+                        customer_id = row[0]
+                        cursor.execute("INSERT INTO rentals (customer_id, car_id, date_rented) VALUES (%s, %s, current_timestamp)", (customer_id, CAR_ID_TO_RENT))
+                        conn.commit()
+                        break
+                    elif check_identify == "n":
+                        print("Let's check your information again")
                         rent_menu()
+                    else:
+                        print("Type 'y' for yes or 'n' for no")
 
 #---------------------------------------RETURN MENU ------------------------------------------------------------------------#
 def return_menu():
     print("Return a car menu")
+
 #---------------------------------------EXIT------------------------------------------------------------------------#
 def exit_program():
     print("Exiting the program, thank you")
     exit()
-
 
 if __name__ == "__main__":
     main_menu()
