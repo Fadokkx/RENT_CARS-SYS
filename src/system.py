@@ -19,23 +19,38 @@ except Exception as e:
 def main_menu():
     print("\n~~~~~ TopDrive Rent-a-Car Services LTDA. ~~~~~\n")
     print("How may I help you?")
-    print("\n1. Rent a car\n2. Return a car\n3. Exit")
+    print("\n1. Sign up\n2. Return a car\n3. Rent a car\n4. Exit")
     
     main_menu_selection = input("\nEnter your choice: ")
     
     if main_menu_selection == "1":
-        rent_menu()
+        signup_menu()
     elif main_menu_selection == "2":
-        return_menu()
+        rent_menu()
     elif main_menu_selection == "3":
+        return_menu()
+    elif main_menu_selection == "4":
         exit_program()
     else:
         print("\nPlease enter a valid option.\n")
         main_menu()
 
+#---------------------------------------SIGN UP MENU  ------------------------------------------------------------------------#
+def signup_menu():
+    print("\n~~~~~ Sign up menu ~~~~~")
+    print("\nThanks for using our service, using the sign up menu will be more easier to rent your car ")
+    print("We'll need your complete information, so be sure to digit your complete name and data as required")
+
+    new_name = input()
+    new_phone = input()
+    new_country = input()
+    new_email = input()
+
+    pass
+
 #--------------------------------------- RENT MENU ------------------------------------------------------------------------#
 def rent_menu():
-    print("Rent a car menu")
+    print("\n~~~~~ Rent a car menu ~~~~~")
     cursor.execute("SELECT CAR_ID, YEAR_MODEL, MAKE, MODEL, CATEGORY FROM CARS WHERE available = true;")
     car_data = cursor.fetchall()
     # If database empty
@@ -67,7 +82,7 @@ def rent_menu():
         else:
             # Send to "SIGN UP" screen
             print ("\nOne more thing to complete the rent service\n")
-            phone = input("\nInput your phone number \n(in the international format = 12025551234 without spaces or any symbol) \n: ") 
+            phone = input("\nInput your phone number \n(in the international format example: +55(11)912345678 without spaces or any symbol): ") 
             
             # Check if phone is in database 
             cursor.execute("SELECT * FROM customers WHERE phone = %s", (phone,))
@@ -77,8 +92,14 @@ def rent_menu():
             if len(PHONE_CHECK) == 0:
                 print("\nYour phone isn't in our system")
                 name = input("\nEnter your name to register: ") # Required to register
+                if name.isdigit():
+                    print("Please, insert a valid name")
+                    rent_menu()
                 email = input("\nNow, your email: ") # Required to register
                 country = input("\nAnd finally, your country of birth: ") # Required to register
+                if country.isdigit():
+                    print("Please, insert a valid country")
+                    rent_menu()
                 
                 # Insert the variables into database
                 cursor.execute("INSERT INTO customers (name, phone, country, email) VALUES (%s, %s, %s, %s)", (name, phone, country, email))
@@ -136,8 +157,24 @@ def rent_menu():
 
 #---------------------------------------RETURN MENU ------------------------------------------------------------------------#
 def return_menu():
-    print("Return a car menu")
-
+    print("\n~~~~~ Return a car menu ~~~~~")
+    #Catch the data to confirm registration
+    phone_return = input("\nInput your phone number as in registration \n(in the international format example: +55(11)912345678 without spaces or any symbol): ")
+    name_return = input("\nInput your name as in registration: ")
+    #check in database what's the registration
+    cursor.execute("SELECT name, phone FROM customers WHERE name = %s AND phone = %s", (name_return, phone_return))
+    check_customers_rental = cursor.fetchall()
+    #if returns 0 tuples send to main menu
+    if len(check_customers_rental) == 0:
+        print("Your information seems to be incorrect. Please try again or Sign up in Sign up menu or in Rent Menu.")
+        main_menu()
+    else:
+        # catch the results
+        customer = check_customers_rental[0] if check_customers_rental else None
+        if customer:
+            print(f"I found results with these parameters, are you {customer[0]} with phone {customer[1]}?")
+            check_identify = input("\nIs this correct (y/n)? ")
+            pass
 #---------------------------------------EXIT------------------------------------------------------------------------#
 def exit_program():
     print("Exiting the program, thank you")
