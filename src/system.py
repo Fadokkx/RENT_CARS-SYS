@@ -19,7 +19,7 @@ except Exception as e:
 def main_menu():
     print("\n~~~~~ TopDrive Rent-a-Car Services LTDA. ~~~~~\n")
     print("How may I help you?")
-    print("\n1. Sign up\n2. Return a car\n3. Rent a car\n4. Exit")
+    print("\n1. Sign up\n2. Return a car\n3. Rent a car\n4. Update info\n5. Exit")
     
     main_menu_selection = input("\nEnter your choice: ")
     
@@ -30,6 +30,8 @@ def main_menu():
     elif main_menu_selection == "3":
         return_menu()
     elif main_menu_selection == "4":
+        update_menu
+    elif main_menu_selection == "5":
         exit_program()
     else:
         print("\nPlease enter a valid option.\n")
@@ -38,15 +40,37 @@ def main_menu():
 #---------------------------------------SIGN UP MENU  ------------------------------------------------------------------------#
 def signup_menu():
     print("\n~~~~~ Sign up menu ~~~~~")
+    
+    #Explanation the new menu
     print("\nThanks for using our service, using the sign up menu will be more easier to rent your car ")
     print("We'll need your complete information, so be sure to digit your complete name and data as required")
 
-    new_name = input()
-    new_phone = input()
-    new_country = input()
-    new_email = input()
+    #Getting variables values
+    new_name = input("Insert you complete name (Name Midname Lastname) *no accentuation* please: ")
+    if not new_name.isalpha():
+        print("Please, tell us your complete name (Name Midname LastName) no accentuation please")
+        signup_menu()
+    else:
+        new_phone = input("Input your phone number \n(in the international format example: +55(11)912345678 without spaces or any symbol): ")
+        if not new_phone.isnumeric():
+            print("Please, insert your phone number without signals. Your cellphone will be the most important data in the registration")
+            signup_menu()
+        else:
+            new_country = input("Digit your country in english please (The Default value will be set as Brazilian): ")
+            if not new_country.isalpha():
+                print("Please, insert your country name in english please")
+                signup_menu()
+            else:
+                new_email = input("Tell us your prefereed email (example: JohnDoe@myemaildomain.com): ")
+    #Check if the customers is already registered
+    cursor.execute("SELECT * FROM customers WHERE name = %s OR phone = %s OR email = %s")
+    check_customers_exist = cursor.fethcall()
+    if len(check_customers_exist) > 0:
+        for row in check_customers_exist:
+            print ("It appears that you are already registered or that one of the fields was taken by someone else")
+            print(f"{row[0]} Name: {row[1]} phone: {row[2]} and email: {row[4]}")
 
-    pass
+pass
 
 #--------------------------------------- RENT MENU ------------------------------------------------------------------------#
 def rent_menu():
@@ -175,6 +199,12 @@ def return_menu():
             print(f"I found results with these parameters, are you {customer[0]} with phone {customer[1]}?")
             check_identify = input("\nIs this correct (y/n)? ")
             pass
+
+#--------------------------------------- UPDATE INFO MENU ------------------------------------------------------------------------#
+def update_menu():
+    print("\n~~~~~ Update Customer data menu ~~~~~")
+    pass
+
 #---------------------------------------EXIT------------------------------------------------------------------------#
 def exit_program():
     print("Exiting the program, thank you")
