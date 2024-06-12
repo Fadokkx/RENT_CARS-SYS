@@ -19,7 +19,7 @@ except Exception as e:
 def main_menu():
     print("\n~~~~~ TopDrive Rent-a-Car Services LTDA. ~~~~~\n")
     print("How may I help you?")
-    print("\n1. Sign up\n2. Return a car\n3. Rent a car\n4. Update info\n5. Exit")
+    print("\n1. Sign up\n2. Rent a car\n3. Return a car\n4. Update info\n5. Exit")
     
     main_menu_selection = input("\nEnter your choice: ")
     
@@ -70,7 +70,6 @@ def signup_menu():
             print ("It appears that you are already registered or that one of the fields was taken by someone else")
             print(f"{row[0]} Name: {row[1]} phone: {row[2]} and email: {row[4]}")
 
-pass
 
 #--------------------------------------- RENT MENU ------------------------------------------------------------------------#
 def rent_menu():
@@ -186,7 +185,7 @@ def return_menu():
     phone_return = input("\nInput your phone number as in registration \n(in the international format example: +55(11)912345678 without spaces or any symbol): ")
     name_return = input("\nInput your name as in registration: ")
     #check in database what's the registration
-    cursor.execute("SELECT name, phone FROM customers WHERE name = %s AND phone = %s", (name_return, phone_return))
+    cursor.execute("SELECT customer_id, name, phone, email FROM customers WHERE name = %s AND phone = %s", (name_return, phone_return))
     check_customers_rental = cursor.fetchall()
     #if returns 0 tuples send to main menu
     if len(check_customers_rental) == 0:
@@ -196,9 +195,33 @@ def return_menu():
         # catch the results
         customer = check_customers_rental[0] if check_customers_rental else None
         if customer:
-            print(f"I found results with these parameters, are you {customer[0]} with phone {customer[1]}?")
-            check_identify = input("\nIs this correct (y/n)? ")
-            pass
+            #Confirm the data
+            print(f"I found results with these parameters, are you {customer[1]} with phone {customer[2]} and email {customer[2]}?")
+            #Check all informations
+            check_identify = input("\nIs all information correct ? (y/n)")
+            if check_identify == "n":
+                #If the info isn't right send to update info menu
+                print("Go to the update menu and change the incorret information in your registration")
+                update_menu()
+                #else get the rents in the customer by the ID
+            elif check_identify == "y":
+                cursor.execute(f"SELECT car_id, date_rented, rental_id FROM rentals WHERE customer_id = {customer[0]}")
+                rentals_to_return = cursor.fetchall()
+                #Get all te results with these parametres
+                if rentals_to_return:
+                    print(f"\nI find these rent(s) in your registration:")
+                    for rental in rentals_to_return:
+                        cursor.execute("SELECT year_model, make, model, plate FROM cars WHERE car_id = %s", (rental[0],))
+                        car_info = cursor.fetchone()
+                        #Return the rental_id, Year, make, model and plate from all cars where is set rent by the customer_id
+                        if car_info:
+                            print(f"{rental[2]} | {car_info[1]}, {car_info[2]}, {car_info[0]}, {car_info[3]} \nDate Rented: {rental[1]}")
+                else:
+                    print("We don't find any rent in your registration")
+
+                pass
+            else: 
+                print("Please, insert 'y' for yes or 'n' for no")
 
 #--------------------------------------- UPDATE INFO MENU ------------------------------------------------------------------------#
 def update_menu():
