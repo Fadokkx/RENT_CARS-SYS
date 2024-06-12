@@ -1,4 +1,5 @@
 import psycopg2
+import tkinter as tk
 
 # CONNECT TO POSTGRESQL 
 try:
