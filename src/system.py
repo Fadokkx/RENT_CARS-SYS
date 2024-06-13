@@ -44,7 +44,7 @@ def main_menu():
         "5": exit_program
     }
 
-    # Verifica se a seleção do usuário está no dicionário
+    # Check the selection in Main_menu 
     if main_menu_selection not in switch_case:
         print("\nPlease enter a valid option.\n")
         main_menu()
@@ -242,6 +242,48 @@ def return_menu():
 #--------------------------------------- UPDATE INFO MENU ------------------------------------------------------------------------#
 def update_menu():
     print("\n~~~~~ Update Customer data menu ~~~~~")
+    print("\nThis is the Update menu, here you can update your older informations in register, and report any duplicate information in another user.")
+    catch_user_name = input("\nBefore we start, tell us your name as in registration.(\ncomplete name (Name Midname Lastname) *no accentuation* please): ")
+    if not catch_user_name.isalpha():
+        print("Please, insert your real name, as in registration")
+        update_menu()
+    else:
+        catch_user_phone = input("\nNow, tell us your phone as in registration\n(in the international format example: +55(11)912345678 without spaces or any symbol): ")
+        if not catch_user_phone.isnumeric():
+            print("Please, insert your phone, as in registration, the phone is the most important part in registration")
+            update_menu()
+        else:
+            catch_user_email = input("\nLast step is, tell us your email as in registration to avoid duplicate emails in diferent users: ")
+            cursor.execute("SELECT customer_id, name, phone, country, email FROM customers WHERE (name = %s AND phone = %s) OR (name = %s AND email = %s)", (catch_user_name, catch_user_phone, catch_user_name, catch_user_email)) 
+            return_catch_update = cursor.fetchall()
+            print("\nI find :\nId| Name| Phone| country| email")
+            for row in return_catch_update:
+                print(f"{row[0]}| {row[1]}| {row[2]}| {row[3]}| {row[4]}")
+            report_duo_data = input("\nHas any duplicate information ? (y / n): ")
+            if report_duo_data == "y":
+                remove_duo_data()
+            elif report_duo_data == "n":
+                if len(return_catch_update) > 1:
+                    print("\nI see more than 1 results, please, do it again")
+                    update_menu()
+                else:
+                    print (f"So, are you {row[1]} from {row[3]} with the number {row[2]} and email {row[4]} ?")
+                    confirm_identidy = input("Confirm ? (y/n)")
+                    if confirm_identidy == "y":
+                        pass
+                    elif confirm_identidy == "n":
+                        pass
+                    else:
+                        print("Please, insert 'y' for yes or 'n' for no, do again")
+                        update_menu() 
+            else:
+                print("Please, insert 'y' for yes or 'n' for no, do again")
+                update_menu() 
+    
+    pass
+
+#--------------------------------------- REMOVE DUO Data------------------------------------------------------------------------#
+def remove_duo_data():
     pass
 
 #---------------------------------------EXIT------------------------------------------------------------------------#
