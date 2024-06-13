@@ -1,15 +1,27 @@
 import psycopg2
+import os
 import tkinter as tk
 
 # CONNECT TO POSTGRESQL 
 try:
+    # catch the Environment Variables values
+    db_host = os.getenv("DB_HOST")
+    db_name = os.getenv("DB_NAME")
+    db_user = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD")
+
+    # Make sure all variables are defined.
+    if not all([db_host, db_name, db_user, db_password]):
+        raise ValueError("All database environment variables must be set")
+
+    # Connect into Database set
     conn = psycopg2.connect(
-        host="localhost",
-        database="rentcarssys",
-        user="postgres",
-        password="123",
+        host=db_host,
+        database=db_name,
+        user=db_user,
+        password=db_password,
         options="-c client_encoding=UTF8"
-    )    
+    )
     # CREATE A CURSOR
     cursor = conn.cursor()
 except Exception as e:
@@ -24,19 +36,22 @@ def main_menu():
     
     main_menu_selection = input("\nEnter your choice: ")
     
-    if main_menu_selection == "1":
-        signup_menu()
-    elif main_menu_selection == "2":
-        rent_menu()
-    elif main_menu_selection == "3":
-        return_menu()
-    elif main_menu_selection == "4":
-        update_menu
-    elif main_menu_selection == "5":
-        exit_program()
-    else:
+    switch_case = {
+        "1": signup_menu,
+        "2": rent_menu,
+        "3": return_menu,
+        "4": update_menu,
+        "5": exit_program
+    }
+
+    # Verifica se a seleção do usuário está no dicionário
+    if main_menu_selection not in switch_case:
         print("\nPlease enter a valid option.\n")
         main_menu()
+        
+    else:
+        switch_case[main_menu_selection]()
+
 
 #---------------------------------------SIGN UP MENU  ------------------------------------------------------------------------#
 def signup_menu():
